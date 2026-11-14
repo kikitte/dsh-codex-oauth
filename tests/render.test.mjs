@@ -279,6 +279,58 @@ test('the browser-login notice opens the page, offers the link, and tells the tr
   }
 })
 
+test('stale browser notices never open on mount or remount after an attempt settles', async () => {
+  const opened = []
+  let signInCalls = 0
+  const originalOpen = dom.window.open
+  dom.window.open = (url) => { opened.push(url); return null }
+  try {
+    for (const phase of ['idle', 'authorized', 'cancelled', 'failed']) {
+      for (const signedIn of [false, true]) {
+        const api = apiReturning(status({
+          signedIn,
+          attempt: {
+            phase,
+            notice: { message: 'Old login', url: 'https://auth.example.test/stale', code: null },
+            prompt: null,
+            error: null,
+          },
+        }))
+        api.signIn = async () => { signInCalls += 1; return { ok: true, value: status().attempt } }
+        for (let mount = 0; mount < 2; mount += 1) {
+          await render(await mountCard(api))
+          await act(async () => { mounted.pop().unmount() })
+        }
+        assert.deepEqual(opened, [], `${phase}, signedIn=${signedIn} reopened a stale URL`)
+      }
+    }
+    assert.equal(signInCalls, 0, 'opening settings must not start sign-in')
+  } finally {
+    dom.window.open = originalOpen
+  }
+})
+
+test('a running browser notice does not open when credentials already say signed in', async () => {
+  const opened = []
+  const originalOpen = dom.window.open
+  dom.window.open = (url) => { opened.push(url); return null }
+  try {
+    await render(await mountCard(apiReturning(status({
+      signedIn: true,
+      attempt: {
+        phase: 'running',
+        notice: { message: 'Login', url: 'https://auth.example.test/authorize', code: null },
+        prompt: null,
+        error: null,
+      },
+    }))))
+    assert.deepEqual(opened, [])
+    await act(async () => { mounted.pop().unmount() })
+  } finally {
+    dom.window.open = originalOpen
+  }
+})
+
 test('a copy button puts the thing on the clipboard', async () => {
   const written = []
   Object.defineProperty(dom.window.navigator, 'clipboard', {

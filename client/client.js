@@ -107,27 +107,27 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var CodexSignIn_module_css_default = {
-			"answerRow": "NEjy1a_answerRow",
-			"title": "NEjy1a_title",
-			"choiceHint": "NEjy1a_choiceHint",
-			"choices": "NEjy1a_choices",
-			"choice": "NEjy1a_choice",
-			"error": "NEjy1a_error",
-			"notice": "NEjy1a_notice",
-			"head": "NEjy1a_head",
-			"headSpacer": "NEjy1a_headSpacer",
-			"code": "NEjy1a_code",
-			"value": "NEjy1a_value",
-			"link": "NEjy1a_link",
 			"device": "NEjy1a_device",
-			"label": "NEjy1a_label",
-			"actions": "NEjy1a_actions",
+			"choices": "NEjy1a_choices",
+			"choiceHint": "NEjy1a_choiceHint",
+			"root": "NEjy1a_root",
 			"body": "NEjy1a_body",
-			"hint": "NEjy1a_hint",
-			"done": "NEjy1a_done",
-			"row": "NEjy1a_row",
+			"link": "NEjy1a_link",
+			"label": "NEjy1a_label",
+			"notice": "NEjy1a_notice",
 			"spin": "NEjy1a_spin",
-			"root": "NEjy1a_root"
+			"done": "NEjy1a_done",
+			"value": "NEjy1a_value",
+			"head": "NEjy1a_head",
+			"error": "NEjy1a_error",
+			"row": "NEjy1a_row",
+			"hint": "NEjy1a_hint",
+			"answerRow": "NEjy1a_answerRow",
+			"actions": "NEjy1a_actions",
+			"code": "NEjy1a_code",
+			"choice": "NEjy1a_choice",
+			"title": "NEjy1a_title",
+			"headSpacer": "NEjy1a_headSpacer"
 		};
 		//#endregion
 		//#region src/client/CodexSignIn.tsx
@@ -344,13 +344,19 @@ window.__ModuleLoader__.load({
 			const noticeCode = status?.attempt.notice?.code ?? null;
 			const opened = (0, react.useRef)("");
 			(0, react.useEffect)(() => {
+				if (phase !== "running" || status?.signedIn === true) return;
 				if (noticeUrl === null || noticeCode !== null) return;
 				if (opened.current === noticeUrl) return;
 				opened.current = noticeUrl;
 				try {
 					window.open(noticeUrl, "_blank", "noopener,noreferrer");
 				} catch {}
-			}, [noticeUrl, noticeCode]);
+			}, [
+				phase,
+				status?.signedIn,
+				noticeUrl,
+				noticeCode
+			]);
 			const signedIn = status?.signedIn === true;
 			const running = phase === "running";
 			const ready = status?.ready !== false;

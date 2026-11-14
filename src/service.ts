@@ -248,6 +248,7 @@ export class CodexAuthService extends TypertRemoteService {
     void authorization.begin({ key: FLOW_KEY, method: LOGIN_METHOD, interaction }).then(
       (outcome) => {
         attempt.prompt?.decline()
+        attempt.notice = null
         attempt.phase = outcome.status === 'authorized' ? 'authorized' : 'cancelled'
         // A route the user has just added or removed is exactly the kind of
         // change that follows a sign-in, so the memo is dropped with it.
@@ -255,6 +256,7 @@ export class CodexAuthService extends TypertRemoteService {
       },
       (error: unknown) => {
         attempt.prompt?.decline()
+        attempt.notice = null
         attempt.phase = 'failed'
         attempt.error = messageOf(error)
       },
@@ -287,7 +289,10 @@ export class CodexAuthService extends TypertRemoteService {
     const attempt = this.state.attempt
     attempt?.prompt?.decline()
     this.seams.authorization?.cancel(FLOW_KEY)
-    if (attempt !== null && attempt.phase === 'running') attempt.phase = 'cancelled'
+    if (attempt !== null) {
+      attempt.notice = null
+      if (attempt.phase === 'running') attempt.phase = 'cancelled'
+    }
     return this.attemptView()
   }
 

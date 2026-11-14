@@ -242,9 +242,11 @@ export function CodexSignIn({ getApi, t }: CodexSignInProps): ReactElement {
   // CLI it was written for opens one. Nothing in the harness does, so the card
   // opens it instead — once per distinct URL, and on a best-effort basis: a
   // popup the browser suppresses leaves the link and the copy button below
-  // doing the job.
+  // doing the job. A retained notice from a settled attempt is not a request
+  // to log in again, especially when this card is remounted from settings.
   const opened = useRef('')
   useEffect(() => {
+    if (phase !== 'running' || status?.signedIn === true) return
     if (noticeUrl === null || noticeCode !== null) return
     if (opened.current === noticeUrl) return
     opened.current = noticeUrl
@@ -254,7 +256,7 @@ export function CodexSignIn({ getApi, t }: CodexSignInProps): ReactElement {
       // A blocked or unavailable popup is not a failure worth reporting; the
       // link is on screen either way.
     }
-  }, [noticeUrl, noticeCode])
+  }, [phase, status?.signedIn, noticeUrl, noticeCode])
 
   const signedIn = status?.signedIn === true
   const running = phase === 'running'

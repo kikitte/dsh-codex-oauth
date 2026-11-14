@@ -234,6 +234,47 @@ test('a sign-in carries the flow notice and question through to the caller', asy
   await ctx.fiber.dispose()
 })
 
+test('settled attempts discard login notices without deleting credentials', async () => {
+  for (const phase of ['authorized', 'cancelled', 'failed']) {
+    const { ctx, service, authorization, credentials } = await harness()
+    try {
+      const record = { kind: 'grant', payload: { type: 'oauth', access: 'opaque' } }
+      credentials.records.set(KEY, record)
+      await service.signIn()
+      authorization.notify({ message: 'Login', url: 'https://auth.example.test/authorize', code: 'ABCD' })
+      assert.notEqual((await service.status()).attempt.notice, null)
+      if (phase === 'failed') authorization.fail(new Error('Login failed'))
+      else authorization.settle(phase)
+      await new Promise((resolve) => setImmediate(resolve))
+      const result = await service.status()
+      assert.equal(result.attempt.phase, phase)
+      assert.equal(result.attempt.notice, null)
+      assert.equal(result.signedIn, true)
+      assert.equal(credentials.records.get(KEY), record)
+      assert.deepEqual(credentials.deleted, [])
+    } finally {
+      await ctx.fiber.dispose()
+    }
+  }
+})
+
+test('explicit cancellation clears its notice before upstream cancellation settles', async () => {
+  const { ctx, service, authorization } = await harness()
+  try {
+    await service.signIn()
+    authorization.notify({ message: 'Login', url: 'https://auth.example.test/authorize' })
+    // Keep the upstream promise pending to test the immediate cancel response.
+    authorization.cancel = () => { authorization.cancels += 1 }
+    const result = await service.cancel()
+    assert.equal(result.phase, 'cancelled')
+    assert.equal(result.notice, null)
+    assert.equal((await service.status()).attempt.notice, null)
+    authorization.settle('cancelled')
+  } finally {
+    await ctx.fiber.dispose()
+  }
+})
+
 test('a second sign-in while one runs reports the live attempt instead of failing', async () => {
   const { ctx, service, authorization } = await harness()
   await service.signIn()
