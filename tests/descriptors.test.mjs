@@ -117,9 +117,14 @@ async function contributionOf() {
 test('the real reflection registry accepts the contribution', async () => {
   // The registry's own browser bundle, mounted on a real Cordis context, so
   // `ctx.typert.remotes.register` is the exact function the page calls.
-  const registryPath = join(dirname(require.resolve('@deepseek-ai/dsh-typert-registry/package.json')), 'lib/client.js')
+  const registryManifestPath = require.resolve('@deepseek-ai/dsh-typert-registry/package.json')
+  const registryManifest = JSON.parse(await readFile(registryManifestPath, 'utf8'))
+  const registryPath = resolve(dirname(registryManifestPath), registryManifest.exports['./client'].browser)
   const cordis = await import('@deepseek-ai/cordis')
-  const registry = await loadFactory(registryPath, { '@deepseek-ai/cordis': cordis })
+  const registry = await loadFactory(registryPath, {
+    '@deepseek-ai/cordis': cordis,
+    zod: createRequire(registryManifestPath)('zod'),
+  })
   const ctx = new Context()
   try {
     registry.apply(ctx)

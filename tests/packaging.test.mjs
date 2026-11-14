@@ -12,7 +12,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 test('packed plugin installs without host packages or build scripts in either layout', async () => {
   const temp = await mkdtemp(join(tmpdir(), 'codex-packaging-'))
   try {
-    const packed = JSON.parse(execFileSync('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', temp], { cwd: root, encoding: 'utf8' }))
+    const packed = Object.values(JSON.parse(execFileSync('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', temp], { cwd: root, encoding: 'utf8' })))
     const archive = join(temp, packed[0].filename)
     for (const layout of ['hoisted', 'isolated']) {
       // Check auto-installing peers too: removing only runtime dependencies
