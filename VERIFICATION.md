@@ -1,10 +1,30 @@
 # VERIFICATION
 
+## Shared host peers — 2026-11-14
+
+Cordis, authorization, credentials and the remote protocol are declared in both
+`peerDependencies` and `devDependencies`. DSH peers target **0.2.2-rc.1**;
+Cordis accepts **~4.1.0**, with **4.1.0** pinned for development. Browser-only
+packages and test tooling remain development dependencies.
+
+- `npm run check` passes type checking, both builds and preflight checks.
+- `npm test` passes all 45 tests. The packed-install regression covers hoisted
+  and isolated profiles with Harness's `autoInstallPeers: false` policy and
+  confirms that neither installs private host packages.
+- A separate Node process exercised the installed Harness **0.2.2-rc.1**
+  `PluginPackages` resolver with this checkout registered as a linked root.
+  All four peers selected the installed host packages despite local development
+  copies being present. The plugin's `TypertRemoteService` base and
+  `AuthorizationDeclinedError` constructor matched the host's identities.
+  This check did not boot an application, use credentials or perform OAuth.
+
+The dated sections below describe earlier package declarations and validation.
+
 ## Issue #3 regression — 2026-11-10
 
-The distribution now has no runtime, optional, or peer dependencies and no
-install/pack lifecycle builds. DSH packages are pinned development tools only;
-the installed plugin imports the running host's service modules through DSH's resolver.
+At that revision, the distribution had no runtime, optional, or peer dependencies
+and no install/pack lifecycle builds. DSH packages were pinned development tools
+only; the installed plugin imported the running host's modules through DSH's resolver.
 This prevents dependency shadowing across upgrades; it is not a promise that
 future breaking host API changes will be compatible.
 

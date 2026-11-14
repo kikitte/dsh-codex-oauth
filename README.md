@@ -119,9 +119,11 @@ npm test
 
 ### 宿主依赖与升级
 
-安装包没有运行时依赖或 peer 依赖，也不会在安装时执行构建。`@deepseek-ai/*`
-仅保留为开发依赖；运行时由 DSH 的模块加载器提供当前宿主的服务，避免旧版包覆盖
-内置授权和账号服务（[Issue #3](https://github.com/callqh/dsh-codex-oauth/issues/3)）。
+Cordis、授权、凭证和远程协议声明为宿主 peer 依赖，同时保留固定版本的开发副本，
+用于类型检查和独立测试。DSH 的解析器也会为链接安装的源码目录选择当前宿主的副本。
+Harness profile 应保持 `autoInstallPeers: false`，避免安装插件时引入覆盖宿主服务的私有副本
+（[Issue #3](https://github.com/callqh/dsh-codex-oauth/issues/3)）。
+安装包没有私有运行时依赖，也不会在安装时执行构建。
 `hoisted` 和 `isolated` 均可使用，无需更改 profile 的依赖布局。
 
 这消除了安装依赖造成的版本覆盖，但不保证未来宿主 API 变更仍然兼容。

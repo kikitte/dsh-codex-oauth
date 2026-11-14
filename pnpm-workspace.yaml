@@ -1,4 +1,4 @@
-# Development dependencies only; installed plugins use the host module resolver.
+# Shared host peers are also installed as development dependencies here.
 packages:
   - .
 

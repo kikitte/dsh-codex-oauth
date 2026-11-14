@@ -126,10 +126,13 @@ after changing anything under `src/`.
 
 ### Host dependencies and upgrades
 
-The distribution has no runtime or peer dependencies and runs no install-time build.
-`@deepseek-ai/*` packages are development dependencies only. At runtime, DSH's
-module loader supplies the host's services, preventing old packages from shadowing
-built-in authorization and account services ([Issue #3](https://github.com/callqh/dsh-codex-oauth/issues/3)).
+Cordis, authorization, credentials and the remote protocol are declared as host
+peer dependencies, with pinned development copies for type checking and standalone
+tests. DSH's resolver selects the running host's copies for linked checkouts too.
+Harness profiles must keep `autoInstallPeers: false`, so installing the plugin
+does not add private service copies that shadow the host
+([Issue #3](https://github.com/callqh/dsh-codex-oauth/issues/3)).
+The distribution has no private runtime dependencies and runs no install-time build.
 Both `hoisted` and `isolated` layouts are supported; changing the profile layout is unnecessary.
 
 This removes dependency shadowing, not the need to check compatibility when host APIs change.

@@ -51,14 +51,22 @@ When you are done, report:
 
 ## What you need
 
-- **DeepSeek Harness `0.2.0-rc.2`** — the line this plugin is built and verified
-  against. Run `dsh --version` or read the version in **Settings → General**.
+- **DeepSeek Harness `0.2.2-rc.1`** — the release targeted by this plugin's host
+  peer requirements. Run `dsh --version` or read the version in **Settings → General**.
 - A **ChatGPT Plus or Pro** subscription.
 - Write access to your DSH home (`~/.dsh` by default, or `$DSH_HOME`).
 
 ## Host dependencies
 
-This plugin installs no DSH service packages and runs no install-time build. It ships built artifacts and uses host-provided services at runtime. Both `hoisted` and `isolated` work. When upgrading an old installation, use the original installation route to update and reinstall profile dependencies, pruning unused old transitive DSH packages, then restart manually. Preserve packages explicitly required by other plugins. Do not grant incompatible-version exemptions as a workaround.
+This plugin declares shared host packages as peers and keeps development copies
+for type checking and standalone tests. Keep `autoInstallPeers: false` in the
+profile's `pnpm-workspace.yaml`, as Harness profiles do, so installation adds no
+private DSH service copies. Linked checkouts also use the running host's peers.
+The plugin ships built artifacts and runs no install-time build. Both `hoisted`
+and `isolated` work. When upgrading an old installation, use the original
+installation route to update and reinstall profile dependencies, pruning unused
+old transitive DSH packages, then restart manually. Preserve packages explicitly
+required by other plugins. Do not grant incompatible-version exemptions as a workaround.
 
 ## 1. Find your profile
 

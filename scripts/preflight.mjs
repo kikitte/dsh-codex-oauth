@@ -84,10 +84,17 @@ check('exports["./client"] points at the bundle', pkg.exports?.['./client'] === 
 check('exports["."] default points at lib/index.js', pkg.exports?.['.']?.default === './lib/index.js', pkg.exports?.['.']?.default)
 check('main points at lib/index.js', pkg.main === 'lib/index.js', pkg.main)
 
-// DSH owns these services. Installing even an optional peer can place a second
-// version in the profile and shadow the bundled authorization/account services.
-for (const field of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
+// Host peers select the running Harness's modules for linked checkouts. Keep
+// local development copies, but do not install private runtime service copies.
+for (const field of ['dependencies', 'optionalDependencies']) {
   check(`${field} cannot install host packages`, Object.keys(pkg[field] ?? {}).length === 0)
+}
+const HOST_PEERS = ['@deepseek-ai/cordis', '@deepseek-ai/dsh-authorization', '@deepseek-ai/dsh-credentials', '@deepseek-ai/dsh-typert-protocol']
+check('peer dependencies declare only the shared host packages',
+  JSON.stringify(Object.keys(pkg.peerDependencies ?? {}).sort()) === JSON.stringify([...HOST_PEERS].sort()))
+for (const id of HOST_PEERS) {
+  check(`shared host peer ${id} declares a version`, typeof pkg.peerDependencies?.[id] === 'string' && pkg.peerDependencies[id].length > 0)
+  check(`shared host peer ${id} has a development copy`, typeof pkg.devDependencies?.[id] === 'string')
 }
 for (const hook of ['preinstall', 'install', 'postinstall', 'prepare', 'prepack']) {
   check(`installation does not run ${hook}`, pkg.scripts?.[hook] === undefined)

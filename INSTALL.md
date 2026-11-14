@@ -48,14 +48,19 @@ https://github.com/callqh/dsh-codex-oauth
 
 ## 环境要求
 
-- **DeepSeek Harness `0.2.0-rc.2`** —— 这个插件就是针对这条版本线构建和验证的。用
+- **DeepSeek Harness `0.2.2-rc.1`** —— 这个插件的宿主 peer 依赖针对该版本。用
   `dsh --version`，或在 **设置 → 通用** 里看版本号。
 - 一个 **ChatGPT Plus 或 Pro** 订阅。
 - 对 DSH home 的写权限（默认 `~/.dsh`，或 `$DSH_HOME`）。
 
 ## 宿主依赖
 
-本插件不安装 DSH 服务包，也不执行安装时构建；直接使用已提交的构建产物，运行时复用宿主服务。无需切换 `hoisted` / `isolated`。从旧版更新时，应通过原安装途径更新并重新安装 profile 依赖，清理不再需要的旧版 DSH 传递依赖，再手动重启。保留其他插件明确依赖的包。不要通过放行不兼容版本来绕过检查。
+本插件将共享宿主包声明为 peer 依赖，同时保留开发副本用于类型检查和独立测试。
+profile 的 `pnpm-workspace.yaml` 应与 Harness 默认配置一致，保持
+`autoInstallPeers: false`，避免安装私有 DSH 服务副本。链接安装的源码目录也复用当前宿主的 peer。
+插件直接使用已提交的构建产物，不执行安装时构建；无需切换 `hoisted` / `isolated`。
+从旧版更新时，应通过原安装途径更新并重新安装 profile 依赖，清理不再需要的旧版 DSH
+传递依赖，再手动重启。保留其他插件明确依赖的包。不要通过放行不兼容版本来绕过检查。
 
 ## 1. 确认你在哪个 profile
 

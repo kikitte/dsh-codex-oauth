@@ -107,27 +107,27 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var CodexSignIn_module_css_default = {
+			"answerRow": "NEjy1a_answerRow",
+			"title": "NEjy1a_title",
+			"choiceHint": "NEjy1a_choiceHint",
+			"choices": "NEjy1a_choices",
+			"choice": "NEjy1a_choice",
+			"error": "NEjy1a_error",
+			"notice": "NEjy1a_notice",
+			"head": "NEjy1a_head",
 			"headSpacer": "NEjy1a_headSpacer",
 			"code": "NEjy1a_code",
-			"spin": "NEjy1a_spin",
-			"choices": "NEjy1a_choices",
-			"row": "NEjy1a_row",
-			"title": "NEjy1a_title",
-			"done": "NEjy1a_done",
-			"actions": "NEjy1a_actions",
-			"link": "NEjy1a_link",
-			"root": "NEjy1a_root",
-			"label": "NEjy1a_label",
-			"notice": "NEjy1a_notice",
-			"device": "NEjy1a_device",
-			"body": "NEjy1a_body",
-			"head": "NEjy1a_head",
-			"error": "NEjy1a_error",
-			"answerRow": "NEjy1a_answerRow",
-			"choice": "NEjy1a_choice",
 			"value": "NEjy1a_value",
+			"link": "NEjy1a_link",
+			"device": "NEjy1a_device",
+			"label": "NEjy1a_label",
+			"actions": "NEjy1a_actions",
+			"body": "NEjy1a_body",
 			"hint": "NEjy1a_hint",
-			"choiceHint": "NEjy1a_choiceHint"
+			"done": "NEjy1a_done",
+			"row": "NEjy1a_row",
+			"spin": "NEjy1a_spin",
+			"root": "NEjy1a_root"
 		};
 		//#endregion
 		//#region src/client/CodexSignIn.tsx
