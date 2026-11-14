@@ -3,7 +3,7 @@
 **在 DeepSeek Harness 里用 ChatGPT Plus / Pro 订阅登录 OpenAI Codex。**
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-0.2.0--rc.2-4B6EF5)](https://github.com/deepseek-ai/deepseek-harness)
+[![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-0.2.2--rc.3-4B6EF5)](https://github.com/deepseek-ai/deepseek-harness)
 
 [English](README.en.md) | 中文
 
@@ -78,14 +78,14 @@ dsh plugin --profile web add github:callqh/dsh-codex-oauth
 
 ## 验证到什么程度
 
-- `npm test` —— 45 个用例，含安装包回归验证。
-- `npm run stage-verify -- --browser` —— 在一个由真实 profile 补丁层搭出来的一次性
-  profile 里跑 26 项检查，其中包括对真实 flow 发起两条登录分支再撤回，以及用真实
-  浏览器把卡片渲染出来。
-- 本机已经完成过一次真实的 ChatGPT 授权，卡片能把那份凭证读回来。
+- `npm test` —— 使用 rc.3 开发包运行 50 个用例，共六组，含安装包回归验证。
+- `npm run stage-verify -- --startup-only` —— 在一次性 profile 中验证 rc.3 启动和
+  只读 RPC，不发起 OAuth。
+- 早期版本还验证过两条登录分支、真实浏览器渲染和真实 ChatGPT 授权；历史记录见
+  [VERIFICATION.md](VERIFICATION.md)。
 
-**还没验证的：向 Codex 模型发一条真实请求。** 如果你正好卡在这里，欢迎开 issue。
-细节见 [VERIFICATION.md](VERIFICATION.md)。
+**rc.3 上尚未重新验证：** 真实 ChatGPT 授权、浏览器 / Desktop 视觉效果。
+**仍未验证：** 向 Codex 模型发一条真实请求。
 
 ## 出问题了
 
@@ -119,8 +119,9 @@ npm test
 
 ### 宿主依赖与升级
 
-Cordis、授权、凭证和远程协议声明为宿主 peer 依赖，同时保留固定版本的开发副本，
-用于类型检查和独立测试。DSH 的解析器也会为链接安装的源码目录选择当前宿主的副本。
+此版本针对 **DeepSeek Harness 0.2.2-rc.3**。Cordis、授权、凭证和远程协议声明为宿主
+peer 依赖，同时保留固定版本的开发副本，用于类型检查和独立测试。DSH 的解析器也会为
+链接安装的源码目录选择当前宿主的副本。
 Harness profile 应保持 `autoInstallPeers: false`，避免安装插件时引入覆盖宿主服务的私有副本
 （[Issue #3](https://github.com/callqh/dsh-codex-oauth/issues/3)）。
 安装包没有私有运行时依赖，也不会在安装时执行构建。

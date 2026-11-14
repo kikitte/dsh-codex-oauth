@@ -3,7 +3,7 @@
 **Sign in to OpenAI Codex from DeepSeek Harness with your ChatGPT Plus/Pro subscription.**
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-0.2.0--rc.2-4B6EF5)](https://github.com/deepseek-ai/deepseek-harness)
+[![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-0.2.2--rc.3-4B6EF5)](https://github.com/deepseek-ai/deepseek-harness)
 
 English | [中文](README.md)
 
@@ -82,15 +82,14 @@ and it flips there without a page refresh. Sign out deletes the credential.
 
 ## Verified
 
-- `npm test` — 45 cases across five lanes.
-- `npm run stage-verify -- --browser` — 26 checks in a throwaway profile built
-  from a real profile's patch layer, including both sign-in branches driven
-  against the real flow and the card rendered in a real browser.
-- A real ChatGPT sign-in has been completed on this machine; the credential it
-  leaves is read back by the card.
+- `npm test` — 50 cases across six lanes, using the rc.3 development packages.
+- `npm run stage-verify -- --startup-only` — rc.3 startup and read-only RPC
+  checks in a throwaway profile, without starting OAuth.
+- Earlier builds also exercised both sign-in branches, browser rendering and a
+  real ChatGPT sign-in; see the dated records in [VERIFICATION.md](VERIFICATION.md).
 
-**Not yet exercised: a request to a Codex model.** If that is where it breaks
-for you, please open an issue. Details: [VERIFICATION.md](VERIFICATION.md).
+**Not re-tested on rc.3:** real ChatGPT sign-in and browser/Desktop visuals.
+**Not yet exercised:** a request to a Codex model.
 
 ## Not working?
 
@@ -126,9 +125,10 @@ after changing anything under `src/`.
 
 ### Host dependencies and upgrades
 
-Cordis, authorization, credentials and the remote protocol are declared as host
-peer dependencies, with pinned development copies for type checking and standalone
-tests. DSH's resolver selects the running host's copies for linked checkouts too.
+This revision targets **DeepSeek Harness 0.2.2-rc.3**. Cordis, authorization,
+credentials and the remote protocol are declared as host peer dependencies, with
+pinned development copies for type checking and standalone tests. DSH's resolver
+selects the running host's copies for linked checkouts too.
 Harness profiles must keep `autoInstallPeers: false`, so installing the plugin
 does not add private service copies that shadow the host
 ([Issue #3](https://github.com/callqh/dsh-codex-oauth/issues/3)).

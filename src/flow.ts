@@ -3,7 +3,7 @@
  * about how it works.
  *
  * These are facts about two upstreams, both read from the installed runtime
- * (0.2.0-rc.2) rather than assumed:
+ * (verified against 0.2.2-rc.3) rather than assumed:
  *
  * - `llm-pi-ai` registers one authorization flow per INSTALLED CATALOG provider
  *   the moment it mounts — unconditionally on configuration, because a provider

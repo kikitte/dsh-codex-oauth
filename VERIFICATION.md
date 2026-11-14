@@ -1,5 +1,54 @@
 # VERIFICATION
 
+## DSH 0.2.2-rc.3 compatibility — 2026-11-14
+
+- Updated the DSH host peers and pinned development SDKs to **0.2.2-rc.3**;
+  Cordis remains **~4.1.0**, with **4.1.0** used for development. The new
+  `dsh-llm` peer `dsh-error` is a development dependency only. The distribution
+  still has no private runtime dependencies and no install-time build.
+- Reviewed the installed rc.3 upgrade index. The account Remote migration keeps
+  `account/getState` unchanged, so the staging regression needs no migration.
+  The window-drag guide concerns custom overlays, not this ordinary settings
+  section. Other indexed guides concern services this plugin does not consume
+  (notifications, Forge, CUA, sessions, terminals, search and agent context).
+- Audited rc.3 authorization, credential records, pi-ai's Codex grant format,
+  Remote descriptors and the settings-section contract. No OAuth bridge or wire
+  format change was needed. The descriptor lane already selects the registry's
+  browser export explicitly, including rc.3's conditional browser/node exports.
+- `npm run check` passed host/client type checking, both builds and all 42
+  preflight assertions. Committed host/client artifacts were rebuilt.
+- `npm test` passed **50 tests across six lanes**, including the real rc.3
+  reflection registry, React rendering, and tarball installation in both
+  `hoisted` and `isolated` layouts. The added SDK-alignment test refuses stale
+  installed SDKs or host peer requirements that differ from the tested SDK.
+  Packaging uses a disposable npm cache rather than depending on the user's
+  cache permissions.
+- `pnpm peers check` reports **No peer dependency issues found** in development.
+- Ran `stage-verify --startup-only` against the installed npm CLI **0.2.2-rc.3**,
+  Node **24.22.3**, pnpm **12.20.0**, using separate synthetic source profiles
+  for **hoisted and isolated** layouts, both with `autoInstallPeers: false`.
+  Each run passed **11 checks**: boot/activation, client bundle discovery,
+  built-in account RPC, Codex status/readiness/flow/route, argument marshalling,
+  and Models directory visibility/addressability. These runs installed the
+  packed plugin, not a linked development checkout. pnpm's missing-host-peer
+  warning in the throwaway profiles is expected: DSH supplies those peers from
+  its running installation rather than installing profile-local copies.
+
+To repeat the host smoke check, prepare a disposable source profile containing
+only a keyless `llm-pi-ai` / `openai-codex` route and a workspace configuration
+with `autoInstallPeers: false`, then run:
+
+```sh
+DSH_HOME=<fixture-home> npm_config_cache=<temporary-cache> \
+  node scripts/stage-verify.mjs --dsh <rc.3-cli>/lib/bin.js \
+  --source <fixture-profile> --startup-only
+```
+
+No existing personal profile, credential or running Harness instance was changed.
+No real OAuth login, outbound model request or browser/Desktop visual verification
+was performed for rc.3. Earlier browser/sign-in results below are historical and
+must not be read as rc.3 verification.
+
 ## Shared host peers — 2026-11-14
 
 Cordis, authorization, credentials and the remote protocol are declared in both

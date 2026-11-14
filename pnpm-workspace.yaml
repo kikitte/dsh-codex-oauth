@@ -6,17 +6,18 @@ nodeLinker: hoisted
 # Host package peers are supplied explicitly in the development workspace.
 autoInstallPeers: false
 # `minimumReleaseAge` is a machine-wide supply-chain delay on the user's pnpm
-# config, and the whole @deepseek-ai 0.2.2-rc.1 line is younger than it. The
+# config, and the whole @deepseek-ai 0.2.2-rc.3 line is younger than it. The
 # exclusions name exactly the artifacts this package installs.
 minimumReleaseAgeExclude:
   - '@deepseek-ai/cordis@4.1.0'
-  - '@deepseek-ai/dsh-authorization@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-brand@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-client-ui-primitives@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-credentials@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-llm@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-timeout@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-typert-protocol@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-util-crypto@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-util-values@0.2.2-rc.1'
-  - '@deepseek-ai/dsh-typert-registry@0.2.2-rc.1'
+  - '@deepseek-ai/dsh-authorization@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-brand@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-client-ui-primitives@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-credentials@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-error@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-llm@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-timeout@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-typert-protocol@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-util-crypto@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-util-values@0.2.2-rc.3'
+  - '@deepseek-ai/dsh-typert-registry@0.2.2-rc.3'

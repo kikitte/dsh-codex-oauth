@@ -9,10 +9,22 @@ import { fileURLToPath } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
+test('DSH host peers and installed development SDKs target the same release', async () => {
+  const manifest = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
+  for (const [id, version] of Object.entries(manifest.devDependencies)) {
+    if (!id.startsWith('@deepseek-ai/dsh-')) continue
+    const installed = JSON.parse(await readFile(new URL(import.meta.resolve(`${id}/package.json`)), 'utf8'))
+    assert.equal(installed.version, version, `${id}: reinstall development dependencies before testing`)
+    if (Object.hasOwn(manifest.peerDependencies, id)) {
+      assert.equal(manifest.peerDependencies[id], version, `${id}: host requirement must match the tested SDK`)
+    }
+  }
+})
+
 test('packed plugin keeps host peers external with Harness peer installation disabled in either layout', async () => {
   const temp = await mkdtemp(join(tmpdir(), 'codex-packaging-'))
   try {
-    const packed = Object.values(JSON.parse(execFileSync('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', temp], { cwd: root, encoding: 'utf8' })))
+    const packed = Object.values(JSON.parse(execFileSync('npm', ['pack', '--ignore-scripts', '--json', '--cache', join(temp, 'npm-cache'), '--pack-destination', temp], { cwd: root, encoding: 'utf8' })))
     const archive = join(temp, packed[0].filename)
     for (const layout of ['hoisted', 'isolated']) {
       // Harness supplies these peers from its runtime resolution instead of

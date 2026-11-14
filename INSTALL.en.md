@@ -51,7 +51,7 @@ When you are done, report:
 
 ## What you need
 
-- **DeepSeek Harness `0.2.2-rc.1`** — the release targeted by this plugin's host
+- **DeepSeek Harness `0.2.2-rc.3`** — the release targeted by this plugin's host
   peer requirements. Run `dsh --version` or read the version in **Settings → General**.
 - A **ChatGPT Plus or Pro** subscription.
 - Write access to your DSH home (`~/.dsh` by default, or `$DSH_HOME`).

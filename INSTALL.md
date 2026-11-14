@@ -48,7 +48,7 @@ https://github.com/callqh/dsh-codex-oauth
 
 ## 环境要求
 
-- **DeepSeek Harness `0.2.2-rc.1`** —— 这个插件的宿主 peer 依赖针对该版本。用
+- **DeepSeek Harness `0.2.2-rc.3`** —— 这个插件的宿主 peer 依赖针对该版本。用
   `dsh --version`，或在 **设置 → 通用** 里看版本号。
 - 一个 **ChatGPT Plus 或 Pro** 订阅。
 - 对 DSH home 的写权限（默认 `~/.dsh`，或 `$DSH_HOME`）。
